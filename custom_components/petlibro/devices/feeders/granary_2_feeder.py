@@ -1,41 +1,60 @@
 import json
+import re
 from logging import getLogger
 
 from .granary_smart_feeder import GranarySmartFeeder
 
 _LOGGER = getLogger(__name__)
 
+_REDACT = re.compile(r"ssid|mac|ip$|ipaddr|token|auth|wifi|email|password|secret|lat|lng|address|phone|bssid", re.I)
+
+# Read-only endpoints dumped once so every field the Granary 2 returns can be mapped.
+_DUMP_PATHS = [
+    "/device/device/baseInfo",
+    "/device/device/realInfo",
+    "/data/data/realInfo",
+    "/device/setting/getAttributeSetting",
+    "/device/data/grainStatus",
+    "/device/feedingPlan/list",
+    "/device/feedingPlan/todayNew",
+    "/device/feedingPlan/listV2",
+    "/device/feedingPlan/todayList",
+    "/device/device/getFreeFeedingSetting",
+    "/device/workRecord/list",
+    "/device/ota/getUpgrade",
+    "/device/device/getDefaultMatrix",
+    "/device/setting/getSleepModeSetting",
+    "/device/device/getFeedingMode",
+]
+
+
+def _redact(value):
+    if isinstance(value, dict):
+        return {k: ("<redacted>" if _REDACT.search(str(k)) else _redact(v)) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_redact(v) for v in value]
+    return value
+
 
 class Granary2Feeder(GranarySmartFeeder):
     """Plain Granary 2 (PLAF105).
 
-    Same as the Granary Smart Feeder, but always asks for the feeding plan list:
-    the base class only asks when the top-level device record carries
-    ``enableFeedingPlan``, which this model's record may not. The first few
-    refreshes also log the raw plan responses so the format can be checked.
+    Same as the Granary Smart Feeder. The first refresh also dumps (redacted) the raw
+    responses of the read-only endpoints so every field can be mapped.
     """
 
-    _diag_left = 3
+    _dumped = False
 
     async def refresh(self):
         await super().refresh()
-        try:
-            plans = await self.api.device_feeding_plan_list(self.serial)
-            today = await self.api.device_feeding_plan_today_new(self.serial)
-            if plans:
-                self.update_data({"feedingPlan": plans})
-            if today:
-                self.update_data({"getfeedingplantoday": today})
-            if Granary2Feeder._diag_left > 0:
-                Granary2Feeder._diag_left -= 1
-                real = self._data.get("realInfo", {}) or {}
-                _LOGGER.warning("PETLIBRO-G2-DIAG %s plan list: %s", self.serial, json.dumps(plans, default=str)[:3500])
-                _LOGGER.warning("PETLIBRO-G2-DIAG %s today: %s", self.serial, json.dumps(today, default=str)[:3500])
-                _LOGGER.warning(
-                    "PETLIBRO-G2-DIAG %s plan-related fields: %s | top-level enableFeedingPlan=%r",
-                    self.serial,
-                    {k: v for k, v in real.items() if "plan" in k.lower() or "feed" in k.lower() or "mode" in k.lower()},
-                    self._data.get("enableFeedingPlan"),
-                )
-        except Exception as err:  # keep the device usable even if the plan calls fail
-            _LOGGER.warning("PETLIBRO-G2-DIAG plan fetch failed for %s: %s", self.serial, err)
+        if Granary2Feeder._dumped:
+            return
+        Granary2Feeder._dumped = True
+        for path in _DUMP_PATHS:
+            try:
+                data = await self.api.session.post_serial(path, self.serial)
+                text = json.dumps(_redact(data), default=str)
+            except Exception as err:  # unknown endpoints are expected to fail
+                text = f"ERROR {type(err).__name__}: {err}"
+            for i in range(0, min(len(text), 12000), 3000):
+                _LOGGER.warning("PETLIBRO-G2-DUMP %s %s [%d] %s", self.serial[-4:], path, i // 3000, text[i:i + 3000])
