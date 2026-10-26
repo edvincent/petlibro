@@ -20,6 +20,7 @@ from .devices.feeders.feeder import Feeder
 from .devices.feeders.air_smart_feeder import AirSmartFeeder
 from .devices.feeders.granary_smart_feeder import GranarySmartFeeder
 from .devices.feeders.granary_smart_camera_feeder import GranarySmartCameraFeeder
+from .devices.feeders.granary_2_feeder import Granary2Feeder
 from .devices.feeders.one_rfid_smart_feeder import OneRFIDSmartFeeder
 from .devices.feeders.polar_wet_food_feeder import PolarWetFoodFeeder
 from .devices.feeders.space_smart_feeder import SpaceSmartFeeder
@@ -1501,6 +1502,152 @@ DEVICE_SENSOR_MAP: dict[type[Device], list[PetLibroSensorEntityDescription]] = {
         ),
     ],
 }
+
+# Plain Granary 2 (PLAF105): fields this model adds
+DEVICE_SENSOR_MAP[Granary2Feeder] = [
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="feeding_mode",
+            icon="mdi:calendar-clock",
+            name="Feeding Mode"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="food_in_bowl",
+            icon="mdi:bowl-mix",
+            native_unit_of_measurement="g",
+            device_class=SensorDeviceClass.WEIGHT,
+            state_class=SensorStateClass.MEASUREMENT,
+            name="Food in Bowl"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="feedable_portions",
+            icon="mdi:counter",
+            state_class=SensorStateClass.MEASUREMENT,
+            name="Feedable Portions"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="portion_weight",
+            icon="mdi:scale",
+            native_unit_of_measurement="g",
+            device_class=SensorDeviceClass.WEIGHT,
+            state_class=SensorStateClass.MEASUREMENT,
+            name="Portion Weight"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="auto_feed_max_weight",
+            icon="mdi:bowl",
+            native_unit_of_measurement="g",
+            device_class=SensorDeviceClass.WEIGHT,
+            state_class=SensorStateClass.MEASUREMENT,
+            name="Bowl Maximum"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="smart_feed_daily_max",
+            icon="mdi:counter",
+            state_class=SensorStateClass.MEASUREMENT,
+            name="Smart Feed Daily Maximum"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="smart_feed_portions_per_feed",
+            icon="mdi:counter",
+            state_class=SensorStateClass.MEASUREMENT,
+            name="Smart Feed Portions per Feed"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="smart_feed_leftover_weight",
+            icon="mdi:scale",
+            native_unit_of_measurement="g",
+            device_class=SensorDeviceClass.WEIGHT,
+            state_class=SensorStateClass.MEASUREMENT,
+            name="Smart Feed Leftover Threshold"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="smart_feed_wait_seconds",
+            icon="mdi:timer-sand",
+            native_unit_of_measurement="s",
+            device_class=SensorDeviceClass.DURATION,
+            state_class=SensorStateClass.MEASUREMENT,
+            name="Smart Feed Wait"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="meal_call_times",
+            icon="mdi:bell-ring",
+            state_class=SensorStateClass.MEASUREMENT,
+            name="Meal Call Times"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="power_state",
+            icon="mdi:power-plug",
+            name="Power State"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="running_state",
+            icon="mdi:state-machine",
+            name="Running State"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="cleaning_state",
+            icon="mdi:broom",
+            name="Cleaning State"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="desiccant_state",
+            icon="mdi:package",
+            name="Desiccant State"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="remaining_cleaning_days",
+            icon="mdi:broom",
+            state_class=SensorStateClass.MEASUREMENT,
+            name="Remaining Cleaning Days"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="last_meal_pet",
+            icon="mdi:paw",
+            name="Last Meal Pet"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="last_meal_intake",
+            icon="mdi:food-drumstick",
+            native_unit_of_measurement="g",
+            device_class=SensorDeviceClass.WEIGHT,
+            state_class=SensorStateClass.MEASUREMENT,
+            name="Last Meal Intake"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="last_meal_duration",
+            icon="mdi:timer-outline",
+            name="Last Meal Duration"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="last_meal_time",
+            icon="mdi:clock-outline",
+            device_class=SensorDeviceClass.TIMESTAMP,
+            name="Last Meal Time"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="last_feed_mode",
+            icon="mdi:calendar-clock",
+            name="Last Feeding Mode"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="last_feed_portions",
+            icon="mdi:counter",
+            state_class=SensorStateClass.MEASUREMENT,
+            name="Last Feed Portions"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="inferred_schedule_text",
+            icon="mdi:calendar-clock",
+            name="Inferred Schedule"
+        ),
+        PetLibroSensorEntityDescription[Granary2Feeder](
+            key="remaining_feeds_today",
+            icon="mdi:counter",
+            state_class=SensorStateClass.MEASUREMENT,
+            name="Remaining Feeds Today"
+        ),
+]
+
 
 async def async_setup_entry(
     hass: HomeAssistant,

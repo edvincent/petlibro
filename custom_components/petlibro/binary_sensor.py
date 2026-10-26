@@ -29,6 +29,7 @@ from .devices.feeders.feeder import Feeder
 from .devices.feeders.air_smart_feeder import AirSmartFeeder
 from .devices.feeders.granary_smart_feeder import GranarySmartFeeder
 from .devices.feeders.granary_smart_camera_feeder import GranarySmartCameraFeeder
+from .devices.feeders.granary_2_feeder import Granary2Feeder
 from .devices.feeders.one_rfid_smart_feeder import OneRFIDSmartFeeder
 from .devices.feeders.polar_wet_food_feeder import PolarWetFoodFeeder
 from .devices.feeders.space_smart_feeder import SpaceSmartFeeder
@@ -768,6 +769,34 @@ DEVICE_BINARY_SENSOR_MAP: dict[type[Device], list[PetLibroBinarySensorEntityDesc
         ),
     ],
 }
+
+
+# Plain Granary 2 (PLAF105): fields this model adds
+DEVICE_BINARY_SENSOR_MAP[Granary2Feeder] = [
+        PetLibroBinarySensorEntityDescription[Granary2Feeder](
+            key="meal_call_enabled",
+            icon="mdi:bell-ring",
+            value_fn=lambda device: device.meal_call_enabled,
+            should_report=lambda device: device.meal_call_enabled is not None,
+            name="Meal Call"
+        ),
+        PetLibroBinarySensorEntityDescription[Granary2Feeder](
+            key="device_stopped_working",
+            icon="mdi:alert",
+            device_class=BinarySensorDeviceClass.PROBLEM,
+            value_fn=lambda device: device.device_stopped_working,
+            should_report=lambda device: device.device_stopped_working is not None,
+            name="Stopped Working"
+        ),
+        PetLibroBinarySensorEntityDescription[Granary2Feeder](
+            key="barn_door_error",
+            icon="mdi:door-open",
+            device_class=BinarySensorDeviceClass.PROBLEM,
+            value_fn=lambda device: device.barn_door_error,
+            should_report=lambda device: device.barn_door_error is not None,
+            name="Door Error"
+        ),
+]
 
 
 async def async_setup_entry(
