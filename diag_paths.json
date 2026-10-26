@@ -1,0 +1,265 @@
+{
+"paths": [
+{
+"path": "/device/feedingPlan/list",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/listNew",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/listV2",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/listV3",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/getList",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/planList",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/listAll",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/listPage",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/queryList",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/detail",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/info",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/schedule",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/scheduleList",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/todayList",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/today",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/todayV2",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/todayNewV2",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/nextFeed",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/nextPlan",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/upcoming",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/getNext",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/feedingList",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/currentPlan",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/getPlan",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/listByPet",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/listWithPet",
+"body": {}
+},
+{
+"path": "/device/plan/list",
+"body": {}
+},
+{
+"path": "/device/granaryFeedingPlan/list",
+"body": {}
+},
+{
+"path": "/device/feedPlan/list",
+"body": {}
+},
+{
+"path": "/device/feeding/plan/list",
+"body": {}
+},
+{
+"path": "/device/plan/listV2",
+"body": {}
+},
+{
+"path": "/device/granaryFeedingPlan/listV2",
+"body": {}
+},
+{
+"path": "/device/feedPlan/listV2",
+"body": {}
+},
+{
+"path": "/device/feeding/plan/listV2",
+"body": {}
+},
+{
+"path": "/device/plan/listV3",
+"body": {}
+},
+{
+"path": "/device/granaryFeedingPlan/listV3",
+"body": {}
+},
+{
+"path": "/device/feedPlan/listV3",
+"body": {}
+},
+{
+"path": "/device/feeding/plan/listV3",
+"body": {}
+},
+{
+"path": "/device/plan/today",
+"body": {}
+},
+{
+"path": "/device/granaryFeedingPlan/today",
+"body": {}
+},
+{
+"path": "/device/feedPlan/today",
+"body": {}
+},
+{
+"path": "/device/feeding/plan/today",
+"body": {}
+},
+{
+"path": "/device/plan/todayNew",
+"body": {}
+},
+{
+"path": "/device/granaryFeedingPlan/todayNew",
+"body": {}
+},
+{
+"path": "/device/feedPlan/todayNew",
+"body": {}
+},
+{
+"path": "/device/feeding/plan/todayNew",
+"body": {}
+},
+{
+"path": "/device/plan/detail",
+"body": {}
+},
+{
+"path": "/device/granaryFeedingPlan/detail",
+"body": {}
+},
+{
+"path": "/device/feedPlan/detail",
+"body": {}
+},
+{
+"path": "/device/feeding/plan/detail",
+"body": {}
+},
+{
+"path": "/device/feedingPlan/list",
+"body": {
+"pageNo": 1,
+"pageSize": 50
+}
+},
+{
+"path": "/device/feedingPlan/list",
+"body": {
+"version": 2
+}
+},
+{
+"path": "/device/feedingPlan/list",
+"body": {
+"type": "PLAN"
+}
+},
+{
+"path": "/device/feedingPlan/list",
+"body": {
+"feedingMode": "PLAN"
+}
+},
+{
+"path": "/device/feedingPlan/todayNew",
+"body": {
+"version": 2
+}
+},
+{
+"path": "/device/device/getFeedingPlanSetting",
+"body": {}
+},
+{
+"path": "/device/setting/getFeedingPlan",
+"body": {}
+},
+{
+"path": "/device/device/feedingMode",
+"body": {}
+},
+{
+"path": "/device/device/getPetFeedingMode",
+"body": {}
+},
+{
+"path": "/device/device/mealCallSetting",
+"body": {}
+},
+{
+"path": "/device/setting/getMealCallSetting",
+"body": {}
+},
+{
+"path": "/device/workRecord/list",
+"body": {
+"type": "FEEDING"
+}
+}
+]
+}

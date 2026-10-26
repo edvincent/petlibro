@@ -43,13 +43,32 @@ class Granary2Feeder(GranarySmartFeeder):
     responses of the read-only endpoints so every field can be mapped.
     """
 
-    _dumped = False
-
     async def refresh(self):
         await super().refresh()
-        if Granary2Feeder._dumped:
+        if getattr(self, "_dumped", False):
             return
-        Granary2Feeder._dumped = True
+        self._dumped = True
+        extra = []
+        try:
+            import aiohttp
+            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=10)) as s:
+                async with s.get("https://raw.githubusercontent.com/edvincent/petlibro/granary2-support/diag_paths.json") as r:
+                    extra = (await r.json(content_type=None)).get("paths", []) if r.status == 200 else []
+        except Exception as err:
+            _LOGGER.warning("PETLIBRO-G2-DUMP could not fetch candidate endpoints: %s", err)
+        for item in extra:
+            path, body = item["path"], dict(item.get("body") or {})
+            try:
+                body["id"] = self.serial
+                body["deviceSn"] = self.serial
+                data = await self.api.session.post(path, json=body)
+                text = json.dumps(_redact(data), default=str)
+            except Exception as err:
+                text = f"ERROR {type(err).__name__}: {str(err)[:80]}"
+            if text.startswith("ERROR") and ("404" in text or "not supported" in text):
+                continue
+            _LOGGER.warning("PETLIBRO-G2-PROBE %s %s %s -> %s", self.serial[-4:], path, json.dumps(item.get("body") or {}), text[:1500])
+        return
         for path in _DUMP_PATHS:
             try:
                 data = await self.api.session.post_serial(path, self.serial)
