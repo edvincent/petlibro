@@ -61,6 +61,18 @@ class Granary2Feeder(GranarySmartFeeder):
         })
 
     # ---- helpers -------------------------------------------------------------------
+    def _tz(self):
+        """Device time zone, falling back to the Home Assistant one before data arrives."""
+        name = self._real.get("timezone") or self._data.get("timezone")
+        if name:
+            try:
+                zone = dt_util.get_time_zone(name)
+                if zone:
+                    return zone
+            except Exception:  # noqa: BLE001 - bad zone names fall back to the default
+                pass
+        return dt_util.DEFAULT_TIME_ZONE
+
     @property
     def _real(self) -> dict:
         merged = dict(self._data.get("realInfo", {}) or {})
@@ -209,7 +221,7 @@ class Granary2Feeder(GranarySmartFeeder):
 
     # ---- inferred schedule ---------------------------------------------------------
     def _plan_feeds(self) -> list[tuple[datetime, int]]:
-        tz = dt_util.get_time_zone(self._real.get("timezone") or "") or dt_util.get_default_time_zone()
+        tz = self._tz()
         feeds = []
         for record in self._flat_records("workRecord"):
             if record.get("type") != "GRAIN_OUTPUT_SUCCESS":
@@ -256,7 +268,7 @@ class Granary2Feeder(GranarySmartFeeder):
         schedule = self.inferred_schedule
         if not schedule:
             return None
-        tz = dt_util.get_time_zone(self._real.get("timezone") or "") or dt_util.get_default_time_zone()
+        tz = self._tz()
         now = dt_util.now(tz)
         candidates = []
         for item in schedule:
@@ -272,6 +284,6 @@ class Granary2Feeder(GranarySmartFeeder):
         schedule = self.inferred_schedule
         if not schedule:
             return None
-        tz = dt_util.get_time_zone(self._real.get("timezone") or "") or dt_util.get_default_time_zone()
+        tz = self._tz()
         now = dt_util.now(tz).strftime("%H:%M")
         return sum(1 for s in schedule if s["time"] > now)
